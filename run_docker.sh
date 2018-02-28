@@ -1,0 +1,1 @@
+docker run -p8000:8000 -it --env-file ./env.list kbs_backend:source

@@ -1,0 +1,1 @@
+cp -rf $HOME/Projects/tmp/kbs_backend . && docker build --no-cache -f "Dockerfile_update_source" -t "kbs_backend:source" .

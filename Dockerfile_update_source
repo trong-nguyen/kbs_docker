@@ -1,0 +1,29 @@
+FROM kbs_backend:dockerfile
+
+ARG APP_DIR=/home/app
+
+RUN apt-get install -yq nginx # RMEOOOOOOOO
+COPY nginx.conf $APP_DIR/tmp/
+RUN cp $APP_DIR/tmp/nginx.conf /etc/nginx/sites-available/api
+RUN rm /etc/nginx/sites-enabled/default
+RUN ln -s /etc/nginx/sites-available/api /etc/nginx/sites-enabled/default
+
+COPY kbs_backend $APP_DIR
+
+WORKDIR $APP_DIR
+
+# Setup the server
+EXPOSE 8000
+EXPOSE 80
+
+# Clean-up
+RUN rm -rf /kbs_backend/
+
+#CMD ["nginx", "-g", "daemon off;"]
+#COPY nginx_walkaround.sh /nginx_walkaround.sh
+#CMD ["/etc/init.d/nginx restart && uwsgi --ini /home/app/kbs_backend/uwsgi.ini"]
+CMD ["uwsgi", "--ini", "/home/app/kbs_backend/uwsgi.ini"]
+#docker exec -di 4f4d8291fda5 /etc/init.d/nginx restart
+
+
+docker exec -di $(docker run -p 80:80 -d --env-file ./env.list kbs_backend:source) /etc/init.d/nginx restart
