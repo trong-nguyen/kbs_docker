@@ -1,1 +1,2 @@
-docker run -p8000:8000 -it --env-file ./env.list kbs_backend:source
+CONTAINER_NAME=${CONTAINER_NAME:-"kbs_container"} && \
+docker run --name $CONTAINER_NAME -p 80:8000 -d --env-file ./env.list kbs_backend:latest
