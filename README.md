@@ -46,7 +46,7 @@ Basically do not use quotes in env files cause quotes will be literally interpre
 
 `docker images purge`: remove dangling images
 
-`docker $(docker images -a -q)`: remove all images
+`docker rmi $(docker images -a -q)`: remove all images
 
 `docker system prune -a`: remove all dangling/un-dangling images, stopped containers
 
