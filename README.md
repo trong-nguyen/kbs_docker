@@ -24,7 +24,9 @@ Short answer:
 - 127.0.0.1 will serve within your container ONLY
 - 0.0.0.0 will let your host (or any outsiders that you allowed) see it
 
-[Long answer](https://stackoverflow.com/questions/26423984/unable-to-connect-to-flask-app-on-docker-from-host)
+Long answers:
+- [Loopback, class A ip addresses](https://stackoverflow.com/questions/26423984/unable-to-connect-to-flask-app-on-docker-from-host)
+- [Ip addresses](http://qr.ae/TU8V5q)
 
 ### Becareful to quote / unquoted variables in shell scripts / compose.yaml / env files
 [Read it here](https://github.com/docker/compose/issues/2854)
