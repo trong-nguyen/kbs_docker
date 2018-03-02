@@ -1,5 +1,13 @@
 # These are prep steps that need to be carried out in the compute / running / serving instance
 # carry out at the home directory
+
+# copy the secrets
+export SECRETS_DIR=$HOME/Projects/kbs_docker &&
+cp SECRETS_DIR/.env . &&
+cp SECRETS_DIR/backend/env.list .
+
+
+
 git clone https://github.com/trong-nguyen/kbs_docker.git
 
 # cloning the repo on compute instance, make sure that the KEY and SECRET present in the env

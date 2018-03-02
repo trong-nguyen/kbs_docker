@@ -51,3 +51,31 @@ Basically do not use quotes in env files cause quotes will be literally interpre
 `docker system prune -a`: remove all dangling/un-dangling images, stopped containers
 
 `docker run [-p HOST_PORT:CONTAINER_PORT] container`: run container binding host ports to container ports
+
+## Git rewriting histories with git-rebase and bfg
+[Reference here](https://rtyley.github.io/bfg-repo-cleaner/)
+
+
+To remove specific sensitive data, be it files or file contents, from repositories, first:
+- Clone the repo into a new mirrored-repo (not a repo) `git clone --mirror git://example.com/some-big-repo.git`
+- Install bfg from [https://github.com/rtyley/bfg-repo-cleaner](https://github.com/rtyley/bfg-repo-cleaner)
+- Remove what-need-to-be-removed with:
+    + text `bfg --replace-text passwords.txt  my-repo.git`
+    + files `bgf --delete-files id_{dsa,rsa}  my-repo.git`
+    + folders `bfg --delete-folders .git`
+- Change directory to the mirrored-repo and run:
+    + `cd some-big-repo.git`
+    + `git reflog expire --expire=now --all && git gc --prune=now --aggressive`
+    + `git push`
+- To be completely safe and clean:
+    + Revoke all exposed api keys and secrets
+    + Removed hosted repositories
+    + Create new repo and push the clean to the hosted
+    + Rewrite git histories with `git rebase`
+
+To clean up empty commits due to bfg removals:
+- Remove empty commits `git filter-branch --prune-empty`
+- Delete the hosted (github?) repo and recreate it using the samename (or else you have to `git remote remove origin` and `git remote add origin {repo_url}` just like when you create it the first time)
+
+If you want to, in great details, rewrite the histories (logs, changes, commits) of a repo:
+- Git rebase **at the same commit** `git rebase -i {commit_id} --onto {commit_id}`

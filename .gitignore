@@ -106,3 +106,4 @@ backend/env.list
 
 # mypy
 .mypy_cache/
+.gitsecret/keys/random_seed
