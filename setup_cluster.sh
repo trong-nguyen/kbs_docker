@@ -1,4 +1,12 @@
+# These are prep steps that need to be carried out in the compute / running / serving instance
+# carry out at the home directory
 git clone https://github.com/trong-nguyen/kbs_docker.git
+
+# cloning the repo on compute instance, make sure that the KEY and SECRET present in the env
+REPO=kbs_backend &&
+REPO_URL=bitbucket.org/trong2nguyen/$REPO.git &&
+git clone "https://x-token-auth:$(curl -X POST -u "$BITBUCKET_KEY:$BITBUCKET_SECRET" https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials | python -c "import sys, json; print json.load(sys.stdin)['access_token']")@$REPO_URL" $REPO \
+&& cd $REPO && git checkout master && cd ..
 
 # copy the env .var to machine
 gcloud compute scp ~/Projects/kbs_docker/.env instance-2:~/kbs_docker/
@@ -13,7 +21,6 @@ echo alias docker-compose="'"'docker run \
     -w="/rootfs/$PWD" \
     docker/compose:1.13.0'"'" >> ~/.bashrc
 source ~/.bashrc
-
 
 # up we go
 docker-compose up

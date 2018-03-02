@@ -17,8 +17,7 @@ services:
     build:
       context: ./backend
       args:
-        REPO_KEY: $BITBUCKET_KEY
-        REPO_SECRET: $BITBUCKET_SECRET
+        REPO: kbs_backend
     env_file: backend/env.list
     environment:
       SERVER_IP: $IP_ADDRESS
