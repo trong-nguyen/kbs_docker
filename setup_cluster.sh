@@ -17,3 +17,5 @@ source ~/.bashrc
 
 # up we go
 docker-compose up
+
+# rootfs
