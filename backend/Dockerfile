@@ -28,7 +28,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR $APP_DIR
 
 # Setup the server
-EXPOSE 8000
+# done in compose
+# EXPOSE 8000
 
 # running task, remember to set WORKDIR properly
 CMD ["uwsgi", "--ini", "kbs_backend/uwsgi.ini", "--http-auto-chunked", "--http-keepalive"]
