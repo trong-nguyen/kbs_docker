@@ -11,12 +11,19 @@ BUILD_DIR=$CONTEXT_DIR/build
 mkdir -p $BUILD_DIR
 
 # check for env files
-{
-    if [ ! -f $CONTEXT_DIR/keys && $CONTEXT_DIR/backend/env.list ]; then
-        echo "ENV vars not found"
-        exit 0
+required_env=(
+    "$CONTEXT_DIR/keys"
+    "$CONTEXT_DIR/.env"
+    "$CONTEXT_DIR/backend/env.list"
+)
+for file in "${required_env[@]}"
+do
+    if [ ! -f $file ]
+    then
+        echo "$file required, not found"
     fi
-}
+done
+
 
 # cloning the repo on compute instance, make sure that the KEY and SECRET present in the env
 . $CONTEXT_DIR/keys &&
