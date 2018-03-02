@@ -1,3 +1,11 @@
+#secrets
+.env
+backend/env.list
+keys
+
+# temporary files and folders
+tmp/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

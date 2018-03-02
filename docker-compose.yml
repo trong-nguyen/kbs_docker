@@ -15,15 +15,14 @@ services:
   backend:
     container_name: backend_01
     build:
-      context: ./backend
+      context: .
+      dockerfile: backend/Dockerfile
       args:
-        REPO: kbs_backend
+        CODE: $BUILD_DIR/kbs_backend
     env_file: backend/env.list
     environment:
       SERVER_IP: $IP_ADDRESS
       SERVER_PORT: "8000"
-    # volumes:
-      # - .:/code
     expose:
       - "8000" #must be identical to SERVER_PORT
     restart: always

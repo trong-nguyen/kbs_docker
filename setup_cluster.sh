@@ -1,23 +1,34 @@
 # These are prep steps that need to be carried out in the compute / running / serving instance
 # carry out at the home directory
 
-# copy the secrets
-export SECRETS_DIR=$HOME/Projects/kbs_docker &&
-cp SECRETS_DIR/.env . &&
-cp SECRETS_DIR/backend/env.list .
+# tmp dir for building
 
+DOCKER_REPO=kbs_docker &&
+CONTEXT_DIR=$PWD/$DOCKER_REPO &&
+git clone https://github.com/trong-nguyen/$DOCKER_REPO.git && cd $CONTEXT_DIR
 
+BUILD_DIR=$CONTEXT_DIR/build
+mkdir -p $BUILD_DIR
 
-git clone https://github.com/trong-nguyen/kbs_docker.git
+# check for env files
+{
+    if [ ! -f $CONTEXT_DIR/keys && $CONTEXT_DIR/backend/env.list ]; then
+        echo "ENV vars not found"
+        exit 0
+    fi
+}
 
 # cloning the repo on compute instance, make sure that the KEY and SECRET present in the env
+. $CONTEXT_DIR/keys &&
 REPO=kbs_backend &&
+REPO_DIR=$BUILD_DIR/$REPO &&
 REPO_URL=bitbucket.org/trong2nguyen/$REPO.git &&
-git clone "https://x-token-auth:$(curl -X POST -u "$BITBUCKET_KEY:$BITBUCKET_SECRET" https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials | python -c "import sys, json; print json.load(sys.stdin)['access_token']")@$REPO_URL" $REPO \
-&& cd $REPO && git checkout master && cd ..
+git clone "https://x-token-auth:$(curl -X POST -u "$BITBUCKET_KEY:$BITBUCKET_SECRET" https://bitbucket.org/site/oauth2/access_token -d grant_type=client_credentials | python -c "import sys, json; print json.load(sys.stdin)['access_token']")@$REPO_URL" $REPO_DIR \
+&& cd $REPO_DIR && git checkout master && cd $CONTEXT_DIR
 
-# copy the env .var to machine
-gcloud compute scp ~/Projects/kbs_docker/.env instance-2:~/kbs_docker/
+#clean up
+unset BITBUCKET_KEY
+unset BITBUCKET_SECRET
 
 # install docker-compose
 # https://cloud.google.com/community/tutorials/docker-compose-on-container-optimized-os
@@ -31,6 +42,7 @@ echo alias docker-compose="'"'docker run \
 source ~/.bashrc
 
 # up we go
-docker-compose up
+docker-compose build
 
 # rootfs
+rm -rf $BUILD_DIR
