@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  webserver:
+    image: nginx:alpine
+    container_name: webserver_01
+    ports:
+      - "80:80"
+    volumes:
+      - /home/nguyentrong/app/webserver/nginx:/etc/nginx/conf.d
+    depends_on:
+      - backend
+    restart: always
+
+  backend:
+    image: us.gcr.io/web-host-196219/kbsdocker_backend:latest
+    env_file: backend/env.list
+    environment:
+      SERVER_IP: $IP_ADDRESS
+      SERVER_PORT: "8000"
+    expose:
+      - "8000" #must be identical to SERVER_PORT
+    restart: always
