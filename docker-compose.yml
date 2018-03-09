@@ -6,23 +6,55 @@ services:
     container_name: webserver_01
     ports:
       - "80:80"
+      - "2368:2368"
     volumes:
-      - ./webserver/nginx:/etc/nginx/conf.d
+      - $WORKING_DIR/webserver/nginx:/etc/nginx/conf.d
     depends_on:
-      - backend
-    restart: always
+      - news
+  #     - backend
+  #   restart: always
 
-  backend:
-    container_name: backend_01
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
-      args:
-        CODE: $BUILD_DIR/kbs_backend
-    env_file: backend/env.list
+  # backend:
+  #   container_name: backend_01
+  #   build:
+  #     context: .
+  #     dockerfile: backend/Dockerfile
+  #     args:
+  #       CODE: $BUILD_DIR/kbs_backend
+  #   env_file: backend/env.list
+  #   environment:
+  #     SERVER_IP: $IP_ADDRESS
+  #     SERVER_PORT: "8000"
+  #   expose:
+  #     - "8000" #must be identical to SERVER_PORT
+  #   restart: always
+
+  news:
+    image: ghost:1-alpine
+    container_name: kbs_news_01
+    volumes:
+      - $PWD/news/ghost/content:/var/lib/ghost/content
     environment:
-      SERVER_IP: $IP_ADDRESS
-      SERVER_PORT: "8000"
+      # url: http://0.0.0.0:2368
+      # server__host: "0.0.0.0"
+      # server__port: "2368"
+
+      NODE_PATH: /var/lib/ghost/content/adapters
+
+      # database configs
+      database__client: sqlite3
+      database__connection__filename: "/var/lib/ghost/content/data/ghost-dev.db"
+      database__useNullAsDefault: "true"
+      database__debug: "false"
+
+      # custom storage
+      storage__active: "s3"
+      storage__s3__bucket: "kbs-news"
+      storage__s3__region: "ap-southeast-1"
+      storage__s3__accessKeyId: ""
+      storage__s3__secretAccessKey: ""
+      # storage__s3__assetHost: ""
+
     expose:
-      - "8000" #must be identical to SERVER_PORT
+      - "2368"
     restart: always

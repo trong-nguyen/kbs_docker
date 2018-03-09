@@ -7,7 +7,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /home/nguyentrong/app/webserver/nginx:/etc/nginx/conf.d
+      - $WORKING_DIR/webserver/nginx:/etc/nginx/conf.d
     depends_on:
       - backend
     restart: always
