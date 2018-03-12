@@ -12,6 +12,7 @@ required_env=(
     "$CONTEXT_DIR/keys"
     "$CONTEXT_DIR/.env"
     "$CONTEXT_DIR/backend/env.list"
+    "$CONTEXT_DIR/news/env.list"
 )
 for file in "${required_env[@]}"
 do
@@ -24,7 +25,7 @@ done
 
 
 mkdir -p deploy
-cp -rf backend webserver .env keys prepare_host.sh deploy
+cp -rf backend webserver news .env prepare_host.sh deploy
 cp -f docker-compose.prod.yml deploy/docker-compose.yml
 
 gcloud compute scp --compress --recurse $PWD/deploy/. instance-3:~/app

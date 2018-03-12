@@ -8,42 +8,47 @@ services:
       - "80:80"
       - "2368:2368"
     volumes:
-      - $WORKING_DIR/webserver/nginx:/etc/nginx/conf.d
+      - $WORKING_DIR/webserver/sites.d:/etc/nginx/conf.d:ro
     depends_on:
       - news
-  #     - backend
-  #   restart: always
+      - backend
+    restart: always
 
-  # backend:
-  #   container_name: backend_01
-  #   build:
-  #     context: .
-  #     dockerfile: backend/Dockerfile
-  #     args:
-  #       CODE: $BUILD_DIR/kbs_backend
-  #   env_file: backend/env.list
-  #   environment:
-  #     SERVER_IP: $IP_ADDRESS
-  #     SERVER_PORT: "8000"
-  #   expose:
-  #     - "8000" #must be identical to SERVER_PORT
-  #   restart: always
+  backend:
+    container_name: backend_01
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      args:
+        CODE: $BUILD_DIR/kbs_backend
+    env_file: backend/env.list
+    environment:
+      SERVER_IP: $IP_ADDRESS
+      SERVER_PORT: "8000"
+    expose:
+      - "8000" #must be identical to SERVER_PORT
+    restart: always
 
   news:
     image: ghost:1-alpine
     container_name: kbs_news_01
     volumes:
-      - $PWD/news/ghost/content:/var/lib/ghost/content
+      # binding minimal persisted data only
+      - $WORKING_DIR/news/ghost/content/adapters:/var/lib/ghost/content/adapters
+      # this is to make it possible to commit the sqlite database
+      # not recommended for scalability reasons or obviously when moving to server - client databases
+      - $WORKING_DIR/news/persistent/db/data:/var/lib/ghost/content/data
+      # - $WORKING_DIR/news/ghost/content/data:/var/lib/ghost/content/data
+      - $WORKING_DIR/news/ghost/content/logs:/var/lib/ghost/content/logs
+    env_file: news/env.list
     environment:
       # url: http://0.0.0.0:2368
       # server__host: "0.0.0.0"
       # server__port: "2368"
 
-      NODE_PATH: /var/lib/ghost/content/adapters
-
       # database configs
       database__client: sqlite3
-      database__connection__filename: "/var/lib/ghost/content/data/ghost-dev.db"
+      database__connection__filename: "/var/lib/ghost/content/data/ghost.db"
       database__useNullAsDefault: "true"
       database__debug: "false"
 
@@ -51,9 +56,11 @@ services:
       storage__active: "s3"
       storage__s3__bucket: "kbs-news"
       storage__s3__region: "ap-southeast-1"
-      storage__s3__accessKeyId: ""
-      storage__s3__secretAccessKey: ""
-      # storage__s3__assetHost: ""
+      storage__s3__pathPrefix: "content/images"
+
+      # mail settings
+      mail__transport: "SES"
+      mail__from: "'Khambacsi Team' <khambacsi@gmail.com>"
 
     expose:
       - "2368"

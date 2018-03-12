@@ -1,6 +1,7 @@
 #secrets
 .env
-backend/env.list
+*/env.list
+*.keys
 keys
 
 # temporary files and folders
@@ -115,3 +116,10 @@ backend/env.list
 # mypy
 .mypy_cache/
 .gitsecret/keys/random_seed
+
+# build directories
+*/build
+
+news/persistent/*
+news/ghost
+tmp
