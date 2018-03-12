@@ -3,7 +3,7 @@ version: '3'
 services:
   webserver:
     image: nginx:alpine
-    container_name: webserver_01
+    container_name: webserver_dev
     ports:
       - "80:80"
       - "2368:2368"
@@ -15,7 +15,7 @@ services:
     restart: always
 
   backend:
-    container_name: backend_01
+    container_name: backend_dev
     build:
       context: .
       dockerfile: backend/Dockerfile
@@ -31,7 +31,7 @@ services:
 
   news:
     image: ghost:1-alpine
-    container_name: kbs_news_01
+    container_name: news_dev
     volumes:
       # binding minimal persisted data only
       - $WORKING_DIR/news/ghost/content/adapters:/var/lib/ghost/content/adapters

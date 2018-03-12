@@ -2,6 +2,7 @@
 # https://cloud.google.com/community/tutorials/docker-compose-on-container-optimized-os
 docker-credential-gcr configure-docker
 
+CONTEXT_DIR=$HOME/app
 
 docker run docker/compose:1.13.0 version
 # alias to bashrc
@@ -14,7 +15,7 @@ echo alias docker-compose="'"'docker run \
 source ~/.bashrc
 
 # up we go
-docker-compose up
+# docker-compose
 
-
-gcloud docker -- push us.gcr.io/web-host-196219/kbsdocker_backend:latest
+cd $CONTEXT_DIR/news && tar -xzf ghost.zip -C ./
+cd $CONTEXT_DIR
