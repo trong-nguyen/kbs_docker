@@ -3,7 +3,7 @@ ENV PYTHONUNBUFFERED 1
 
 # name of the backend repo, i.e. kbs_backend
 ARG APP_DIR=/home/app
-ARG CODE
+ARG CODE=build/kbs_backend
 
 ARG RUNTIME_PACKAGES="sqlite3 libsqlite3-dev libjpeg-dev zlib1g-dev"
 ARG BUILD_PACKAGES="gcc"

@@ -15,8 +15,8 @@ services:
 
 
   backend:
+    image: us.gcr.io/web-host-196219/kbs_backend
     container_name: backend_prod
-    image: us.gcr.io/web-host-196219/kbsdocker_backend
     env_file: backend/env.list
     environment:
       SERVER_IP: $IP_ADDRESS
@@ -26,7 +26,7 @@ services:
     restart: always
 
   news:
-    image: ghost:1-alpine
+    image: us.gcr.io/web-host-196219/kbs_news
     container_name: news_prod
     volumes:
       # binding minimal persisted data only

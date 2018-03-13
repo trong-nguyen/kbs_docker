@@ -16,6 +16,3 @@ source ~/.bashrc
 
 # up we go
 # docker-compose
-
-cd $CONTEXT_DIR/news && tar -xzf ghost.zip -C ./
-cd $CONTEXT_DIR

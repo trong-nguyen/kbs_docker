@@ -15,12 +15,10 @@ services:
     restart: always
 
   backend:
+    image: us.gcr.io/web-host-196219/kbs_backend:latest
     container_name: backend_dev
     build:
-      context: .
-      dockerfile: backend/Dockerfile
-      args:
-        CODE: $BUILD_DIR/kbs_backend
+      context: ./backend
     env_file: backend/env.list
     environment:
       SERVER_IP: $IP_ADDRESS
@@ -30,8 +28,10 @@ services:
     restart: always
 
   news:
-    image: ghost:1-alpine
+    image: us.gcr.io/web-host-196219/kbs_news:latest
     container_name: news_dev
+    build:
+      context: ./news
     volumes:
       # binding minimal persisted data only
       - $WORKING_DIR/news/ghost/content/adapters:/var/lib/ghost/content/adapters

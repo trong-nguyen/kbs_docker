@@ -27,14 +27,22 @@ done
 
 rm -rf deploy
 mkdir -p deploy
-cp -rf backend webserver .env prepare_host.sh deploy
-cp -f docker-compose.* deploy/
 
-#news
+# web
+cp -rf webserver deploy
+
+# backend
+mkdir -p deploy/backend
+cp -rf backend/env.list deploy/backend/
+
+# systemwise
+cp -f .env prepare_host.sh docker-compose.* deploy/
+
+# news
 DB_DIR=news/persistent/db/data
 mkdir -p deploy/$DB_DIR
 cp $DB_DIR/ghost.db deploy/$DB_DIR
-cd news && tar -zvcf ghost.zip ghost && mv ghost.zip $CONTEXT_DIR/deploy/news
+cp news/env.list deploy/news
 cd $CONTEXT_DIR
 
 INSTANCE_NAME=instance-4
