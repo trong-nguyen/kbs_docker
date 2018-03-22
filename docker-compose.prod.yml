@@ -30,7 +30,7 @@ services:
     container_name: news_prod
     volumes:
       # binding minimal persisted data only
-      - $WORKING_DIR/news/ghost/content/adapters:/var/lib/ghost/content/adapters
+      # - $WORKING_DIR/news/ghost/content/adapters:/var/lib/ghost/content/adapters
       # this is to make it possible to commit the sqlite database
       # not recommended for scalability reasons or obviously when moving to server - client databases
       - $WORKING_DIR/news/persistent/db/data:/var/lib/ghost/content/data

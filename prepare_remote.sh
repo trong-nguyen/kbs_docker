@@ -45,5 +45,9 @@ cp $DB_DIR/ghost.db deploy/$DB_DIR
 cp news/env.list deploy/news
 cd $CONTEXT_DIR
 
-INSTANCE_NAME=instance-4
-gcloud compute scp --compress --recurse $PWD/deploy/. $INSTANCE_NAME:~/app
+# INSTANCE_NAME=instance-4
+# gcloud compute scp --compress --recurse $PWD/deploy/. $INSTANCE_NAME:~/app
+
+
+INSTANCE_NAME=khambacsi
+gcloud compute scp --zone=asia-southeast1-a --compress --recurse $PWD/deploy/. $INSTANCE_NAME:~/app

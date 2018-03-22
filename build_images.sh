@@ -14,3 +14,5 @@ HOST_REGION=us.gcr.io
 gcloud docker -- push $HOST_REGION/$PROJECT/kbs_backend
 
 gcloud docker -- push $HOST_REGION/$PROJECT/kbs_news
+
+cd $ROOT

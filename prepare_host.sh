@@ -14,5 +14,8 @@ echo alias docker-compose="'"'docker run \
     docker/compose:1.13.0'"'" >> ~/.bashrc
 source ~/.bashrc
 
+docker pull us.gcr.io/web-host-196219/kbs_backend:latest
+docker pull us.gcr.io/web-host-196219/kbs_news:latest
+
 # up we go
 # docker-compose

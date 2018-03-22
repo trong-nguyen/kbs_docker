@@ -8,7 +8,7 @@ services:
       - "80:80"
       - "2368:2368"
     volumes:
-      - $WORKING_DIR/webserver/sites.d:/etc/nginx/conf.d:ro
+      - $WORKING_DIR/webserver/prod.sites.d:/etc/nginx/conf.d:ro
     depends_on:
       - news
       - backend
@@ -34,7 +34,7 @@ services:
       context: ./news
     volumes:
       # binding minimal persisted data only
-      - $WORKING_DIR/news/ghost/content/adapters:/var/lib/ghost/content/adapters
+      # - $WORKING_DIR/news/ghost/content/adapters:/var/lib/ghost/content/adapters
       # this is to make it possible to commit the sqlite database
       # not recommended for scalability reasons or obviously when moving to server - client databases
       - $WORKING_DIR/news/persistent/db/data:/var/lib/ghost/content/data
