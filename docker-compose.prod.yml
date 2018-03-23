@@ -38,7 +38,7 @@ services:
       - $WORKING_DIR/news/ghost/content/logs:/var/lib/ghost/content/logs
     env_file: news/env.list
     environment:
-      # url: http://0.0.0.0:2368
+      url: http://news.khambacsi.com
       # server__host: "0.0.0.0"
       # server__port: "2368"
 
